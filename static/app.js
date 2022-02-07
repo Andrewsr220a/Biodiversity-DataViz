@@ -1,32 +1,28 @@
 // Function for change on dropdown menu
 function optionChanged(selectedID) {
 
+    // Check if value is selected in dropdown
     console.log(selectedID);
 
+    // Read the json file for the data
     d3.json("data/samples.json").then((data) => {
-
         d3.select("#selDataset").html("");
 
         data.metadata.forEach(item => {
-
             d3.select("#selDataset").append('option').attr('value', item.id).text(item.id);
         });
-
         d3.select("#selDataset").node().value = selectedID;
 
         const idMetadata = data.metadata.filter(item => (item.id == selectedID));
-
         console.log(idMetadata);
 
         const panelDisplay = d3.select("#sample-metadata");
         panelDisplay.html("");
         Object.entries(idMetadata[0]).forEach(item => {
-
             panelDisplay.append("p").text(`${item[0]}: ${item[1]}`)
         });
 
         // BAR CHART
-
         const idSample = data.samples.filter(item => parseInt(item.id) == selectedID);
 
         var sampleValue = idSample[0].sample_values.slice(0, 10);
@@ -37,9 +33,7 @@ function optionChanged(selectedID) {
         otuLabels = otuLabels.reverse();
 
         const yAxis = otuID.map(item => 'OTU' + " " + item);
-        // console.log(yAxis);
 
-        // Define the layout and trace object, edit color and orientation
         const trace = {
             y: yAxis,
             x: sampleValue,
@@ -58,10 +52,10 @@ function optionChanged(selectedID) {
                 xaxis: { title: 'Number of Samples Collected' },
                 yaxis: { title: 'OTU ID' }
             };
+
         Plotly.newPlot('bar', [trace], layout, { responsive: true });
 
         // BUBBLE CHART
-
         var sampleValue1 = idSample[0].sample_values;
         var otuID1 = idSample[0].otu_ids;
 
@@ -85,11 +79,10 @@ function optionChanged(selectedID) {
                 width: 1800
             };
 
-        // Plot using Plotly
         Plotly.newPlot('bubble', [trace1], layout1);
 
-        //GAUGE CHART
 
+        // Gauge Chart 
         const guageDisplay = d3.select("#gauge");
         guageDisplay.html("");
         const washFreq = idMetadata[0].wfreq;
@@ -103,18 +96,17 @@ function optionChanged(selectedID) {
                 mode: "gauge+number",
                 gauge: {
                     axis: { range: [0, 9] },
-                    bar: { color: "#000000" },
+                    bar: { color: "#f2e9e4" },
                     steps: [
-                        { range: [0, 1], color: "#FF5733" },
-                        { range: [1, 2], color: "#FF5E3C" },
-                        { range: [2, 3], color: "#FF6C4D" },
-                        { range: [3, 4], color: "#FF7456" },
-                        { range: [4, 5], color: "#FF8166" },
-                        { range: [5, 6], color: "#FF8E75" },
-                        { range: [6, 7], color: "#FE9A83" },
-                        { range: [7, 8], color: "#FFAE9B" },
-                        { range: [8, 9], color: "#FFC4B7" },
-                        { range: [9, 10], color: "#FFEAE5" },
+                        { range: [0, 1], color: "#e5d5d0" },
+                        { range: [1, 2], color: "#dbc7c2" },
+                        { range: [2, 3], color: "#d2b9b4" },
+                        { range: [3, 4], color: "#c9ada7" },
+                        { range: [4, 5], color: "#ac9899" },
+                        { range: [5, 6], color: "#8a7e88" },
+                        { range: [6, 7], color: "#7d7482" },
+                        { range: [7, 8], color: "#706a7b" },
+                        { range: [8, 9], color: "#4a4e69" }
 
                     ],
                     threshold: {
